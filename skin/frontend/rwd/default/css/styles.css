@@ -4067,13 +4067,6 @@ a.skip-link {
 .footer .links.social-media a:hover em.pinterest {
   background-position: -25px -74px;
 }
-.footer .links.social-media em.rss {
-  background-position: 0 -99px;
-  height: 13px;
-}
-.footer .links.social-media a:hover em.rss {
-  background-position: -25px -99px;
-}
 .footer .block-subscribe .input-box {
   float: left;
   width: 65.625%;

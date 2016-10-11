@@ -190,13 +190,6 @@ class Mage_Adminhtml_Block_Widget_Grid extends Mage_Adminhtml_Block_Widget
     protected $_massactionBlockName = 'adminhtml/widget_grid_massaction';
 
     /**
-    * RSS list
-    *
-    * @var array
-    */
-    protected $_rssLists = array();
-
-    /**
      * Columns view order
      *
      * @var array
@@ -827,16 +820,6 @@ class Mage_Adminhtml_Block_Widget_Grid extends Mage_Adminhtml_Block_Widget
     }
 
      /**
-     * Retrieve rss lists types
-     *
-     * @return array
-     */
-    public function getRssLists()
-    {
-        return empty($this->_rssLists) ? false : $this->_rssLists;
-    }
-
-     /**
      * Returns url for RSS
      * Can be overloaded in descendant classes to perform custom changes to url passed to addRssList()
      *
@@ -851,24 +834,6 @@ class Mage_Adminhtml_Block_Widget_Grid extends Mage_Adminhtml_Block_Widget
             $urlModel->setStore(Mage::app()->getDefaultStoreView());
         }
         return $urlModel->getUrl($url);
-    }
-
-     /**
-     * Add new rss list to grid
-     *
-     * @param   string $url
-     * @param   string $label
-     * @return  Mage_Adminhtml_Block_Widget_Grid
-     */
-    public function addRssList($url, $label)
-    {
-        $this->_rssLists[] = new Varien_Object(
-            array(
-                'url'   => $this->_getRssUrl($url),
-                'label' => $label
-            )
-        );
-        return $this;
     }
 
     /**

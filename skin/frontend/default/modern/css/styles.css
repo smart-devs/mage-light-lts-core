@@ -308,7 +308,6 @@ p.required { font-size:11px; text-align:right; color:#EB340A; }
 .page-title h1,
 .page-title h2 { font-size:23px; font-weight:normal; }
 .page-title .separator { margin:0 3px; }
-.page-title .link-rss { float:right; margin:7px 0 0; }
 .title-buttons { text-align:right; }
 .title-buttons h1,
 .title-buttons h2,
@@ -440,7 +439,6 @@ tr.summary-details-excluded { font-style:italic; }
 .link-reorder {}
 .link-compare {}
 .link-print { /*background:url(../images/i_print.gif) 0 2px no-repeat; padding:3px 0 3px 25px;*/ }
-.link-rss { background:url(../images/i_rss.gif) 0 1px no-repeat; padding-left:18px; line-height:14px; white-space:nowrap; }
 .btn-remove { display:block; width:12px; height:12px; font-size:0; line-height:0; background:url(../images/btn_remove.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; }
 .btn-previous { display:block; width:12px; height:12px; font-size:0; line-height:0; background:url(../images/btn_previous.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; }
 .btn-remove2 { display:block; width:16px; height:16px; font-size:0; line-height:0; background:url(../images/btn_trash.gif) 0 0 no-repeat; text-indent:-999em; overflow:hidden; }
@@ -1103,12 +1101,6 @@ tr.summary-details-excluded { font-style:italic; }
 .page-sitemap .sitemap li.level-0 { margin:10px 0 0; font-weight:bold; }
 .page-sitemap .sitemap li.level-0 a { color:#4f8100; }
 
-/* RSS */
-.rss-title h1 { background:url(../images/i_rss-big.png) 0 3px no-repeat; padding-left:27px; }
-.rss-table .link-rss { display:block; line-height:1.55; background-position:0 4px; }
-/* ======================================================================================= */
-
-
 /* Shopping Cart ========================================================================= */
 .cart .page-title {}
 
@@ -1452,7 +1444,6 @@ tr.summary-details-excluded { font-style:italic; }
 
 
 /* My Account ============================================================================= */
-.my-account .title-buttons .link-rss { float:none; margin:0; }
 
 /********** < Dashboard */
 .dashboard .welcome-msg { margin:0 8em 1.5em 0; }
