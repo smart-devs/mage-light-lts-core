@@ -46,11 +46,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 </li>
             <?php endif ?>
 
-            <?php if ($this->helper('wishlist')->isAllowInCart() && $isVisibleProduct) : ?>
-                <li>
-                    <a href="<?php echo $this->helper('wishlist')->getMoveFromCartUrl($_item->getId()); ?>" class="link-wishlist use-ajax"><?php echo $this->__('Move to wishlist'); ?></a>
-                </li>
-            <?php endif ?>
         </ul>
     </td>
 
@@ -219,13 +214,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 </li>
             <?php endif ?>
 
-            <?php if ($this->helper('wishlist')->isAllowInCart()) : ?>
-            <li>
-                <?php if ($isVisibleProduct): ?>
-                    <a href="<?php echo $this->helper('wishlist')->getMoveFromCartUrl($_item->getId()); ?>" class="link-wishlist use-ajax"><?php echo $this->__('Move to wishlist'); ?></a>
-                <?php endif ?>
-            </li>
-            <?php endif ?>
         </ul>
 
     </td>
