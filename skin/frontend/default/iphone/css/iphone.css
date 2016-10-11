@@ -667,12 +667,6 @@ input[type="checkbox"]:checked {
 
 .customer-account-forgotpassword .fieldset p { margin:0 0 10px; }
 
-/* Captcha
------------------------------*/
-.captcha-image { position:relative; }
-.captcha-image .captcha-img { border:1px solid #e1e1e1; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; }
-.captcha-reload { position:absolute; top:5px; left:0; padding:10px; }
-
 /* Breadcrumbs
 -----------------------------*/
 .breadcrumbs { display:none; }

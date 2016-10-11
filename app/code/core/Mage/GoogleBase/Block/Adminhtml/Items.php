@@ -64,14 +64,6 @@ class Mage_GoogleBase_Block_Adminhtml_Items extends Mage_Adminhtml_Block_Widget_
         return $this->getChildHtml('store_switcher');
     }
 
-    public function getCaptchaHtml()
-    {
-        return $this->getLayout()->createBlock('googlebase/adminhtml_captcha')
-            ->setGbaseCaptchaToken($this->getGbaseCaptchaToken())
-            ->setGbaseCaptchaUrl($this->getGbaseCaptchaUrl())
-            ->toHtml();
-    }
-
     public function getStore()
     {
         return $this->_getData('store');

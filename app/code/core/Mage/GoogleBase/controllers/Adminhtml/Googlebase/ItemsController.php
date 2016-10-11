@@ -55,15 +55,6 @@ class Mage_GoogleBase_Adminhtml_Googlebase_ItemsController extends Mage_Adminhtm
         }
         $contentBlock = $this->getLayout()->createBlock('googlebase/adminhtml_items')->setStore($this->_getStore());
 
-        if ($this->getRequest()->getParam('captcha_token') && $this->getRequest()->getParam('captcha_url')) {
-            $contentBlock->setGbaseCaptchaToken(
-                Mage::helper('core')->urlDecodeAndEscape($this->getRequest()->getParam('captcha_token'))
-            );
-            $contentBlock->setGbaseCaptchaUrl(
-                Mage::helper('core')->urlDecodeAndEscape($this->getRequest()->getParam('captcha_url'))
-            );
-        }
-
         if (!$this->_getConfig()->isValidBaseCurrencyCode($this->_getStore()->getId())) {
             $_countryInfo = $this->_getConfig()->getTargetCountryInfo($this->_getStore()->getId());
             $this->_getSession()->addNotice(
@@ -299,45 +290,6 @@ class Mage_GoogleBase_Adminhtml_Googlebase_ItemsController extends Mage_Adminhtm
         }
 
         $this->_redirect('*/*/index', array('store'=>$storeId));
-    }
-
-    public function confirmCaptchaAction()
-    {
-        $storeId = $this->_getStore()->getId();
-        try {
-            Mage::getModel('googlebase/service')->getClient(
-                $storeId,
-                Mage::helper('core')->urlDecode($this->getRequest()->getParam('captcha_token')),
-                $this->getRequest()->getParam('user_confirm')
-            );
-            $this->_getSession()->addSuccess($this->__('Captcha has been confirmed.'));
-
-        } catch (Zend_Gdata_App_CaptchaRequiredException $e) {
-            $this->_getSession()->addError($this->__('Captcha confirmation error: %s', $e->getMessage()));
-            $this->_redirectToCaptcha($e);
-            return;
-        } catch (Zend_Gdata_App_Exception $e) {
-            $this->_getSession()->addError( $this->_parseGdataExceptionMessage($e->getMessage()) );
-        } catch (Exception $e) {
-            $this->_getSession()->addError($this->__('Captcha confirmation error: %s', $e->getMessage()));
-        }
-
-        $this->_redirect('*/*/index', array('store'=>$storeId));
-    }
-
-    /**
-     * Redirect user to Google Captcha challenge
-     *
-     * @param Zend_Gdata_App_CaptchaRequiredException $e
-     */
-    protected function _redirectToCaptcha($e)
-    {
-        $this->_redirect('*/*/index',
-            array('store' => $this->_getStore()->getId(),
-                'captcha_token' => Mage::helper('core')->urlEncode($e->getCaptchaToken()),
-                'captcha_url' => Mage::helper('core')->urlEncode($e->getCaptchaUrl())
-            )
-        );
     }
 
     /**

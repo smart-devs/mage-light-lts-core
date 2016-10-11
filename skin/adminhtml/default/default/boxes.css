@@ -731,11 +731,6 @@ div.autocomplete ul li { padding:.5em .7em; min-height:32px; cursor:pointer; tex
 .login-container .legal                 { margin:0; background:url(images/login_box_legal_bg.gif) no-repeat; padding:8px 8px 5px 8px; font-size:.95em; }
 .login-form .validation-advice          { margin:3px 0 0 0; }
 .login-form .forgot-link                { margin:0 17px 0 0; text-align:right; }
-.login-form .captcha                    { padding:10px 0 0; }
-.login-form .captcha-image              { border:1px solid #aaa; margin:1.5em 0 0; position:relative; }
-.login-form .captcha-image img          { vertical-align:bottom; }
-.login-form .captcha-reload             { cursor:pointer; position: absolute; top:2px; right:2px; }
-.login-form .captcha-reload.refreshing  { animation:rotate 1.5s infinite linear; -webkit-animation:rotate 1.5s infinite linear; -moz-animation:rotate 1.5s infinite linear; }
 
 @-webkit-keyframes rotate {
     0% { -webkit-transform:rotate(0); }
