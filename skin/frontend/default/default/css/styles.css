@@ -622,7 +622,6 @@ tr.summary-details-excluded { font-style:italic; }
 .block-subscribe,
 .block-compare,
 .block-reorder,
-.block-poll,
 .block-gr-search,
 .block-viewed,
 .block-compared,
@@ -634,7 +633,6 @@ tr.summary-details-excluded { font-style:italic; }
 .block-subscribe .block-title strong,
 .block-compare .block-title strong,
 .block-reorder .block-title strong,
-.block-poll .block-title strong,
 .block-viewed .block-title strong,
 .block-compared .block-title strong,
 .block-related .block-title strong,
@@ -732,18 +730,6 @@ tr.summary-details-excluded { font-style:italic; }
 
 /* Block: Recently Compared */
 .block-compared .block-title strong { background-image:url(../images/i_block-list.gif); background-position:0 1px; }
-
-/* Block: Poll */
-.block-poll .block-title strong { background-image:url(../images/i_block-poll.gif); }
-.block-poll .block-subtitle { font-size:12px; }
-.block-poll label { color:#777; font-weight:bold; }
-.block-poll input.radio { float:left; margin:1px -18px 0 0; }
-.block-poll .label { display:block; margin-left:18px; }
-.block-poll li { padding:3px 9px; }
-.block-poll .actions { margin:5px 0 0; }
-.block-poll button.button span { border-color:#406a83; background:#618499; }
-.block-poll .answer { font-weight:bold; }
-.block-poll .votes { float:right; margin-left:10px; }
 
 /* Block: Orders and Returns */
 .block-gr-search li { padding:3px 9px; }
@@ -1765,7 +1751,6 @@ tr.summary-details-excluded { font-style:italic; }
 .block .block-content:after,
 .block .actions:after,
 .block li.item:after,
-.block-poll li:after,
 .block-layered-nav .currently li:after,
 .page-title:after,
 .products-grid:after,

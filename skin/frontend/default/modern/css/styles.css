@@ -681,16 +681,6 @@ tr.summary-details-excluded { font-style:italic; }
 /* Block: Recently Compared */
 .block-compared {}
 
-/* Block: Poll */
-.block-poll .block-subtitle { font-size:12px; }
-.block-poll label { color:#777; font-weight:bold; }
-.block-poll input.radio { float:left; margin:1px -18px 0 0; }
-.block-poll .label { display:block; margin-left:18px; }
-.block-poll li { padding:3px 9px; }
-.block-poll .actions { margin:5px 0 0; }
-.block-poll .answer { font-weight:bold; }
-.block-poll .votes { float:right; margin-left:10px; }
-
 /* Block: Tags */
 .block-tags .block-content .tags-list { border:0; background:none; padding:0; }
 .block-tags .block-content li a { color:#444; }
@@ -1715,7 +1705,6 @@ tr.summary-details-excluded { font-style:italic; }
 .block .block-content:after,
 .block .actions:after,
 .block li.item:after,
-.block-poll li:after,
 .block-layered-nav .currently li:after,
 .page-title:after,
 .products-grid:after,

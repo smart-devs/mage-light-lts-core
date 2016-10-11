@@ -32,7 +32,6 @@
 * html .main { height:400px; }
 * html .account-login .content { height:240px; }
 .block li.item,
-.block-poll li,
 .opc li.section { vertical-align:top; }
 * html .window-overlay { background:#ccc; filter:alpha(opacity=50); }
 
@@ -93,8 +92,6 @@ table { scrollbar-face-color:expression(runtimeStyle.scrollbarFaceColor = '#fff'
 .block .block-content,
 .block .actions,
 .block li.item,
-.block-poll li,
-.block-poll .label,
 .block-layered-nav .currently li,
 .block-account .block-content li a,
 .mini-products-list .product-details,
