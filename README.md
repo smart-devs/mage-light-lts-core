@@ -1,2 +1,2 @@
 #WIP
-development takes place here
+stable will be here
