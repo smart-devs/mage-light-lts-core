@@ -103,7 +103,7 @@ class Varien_Simplexml_Config_Cache_File extends Varien_Simplexml_Config_Cache_A
         @file_put_contents($this->getStatFileName(), serialize($this->getComponents()));
 
         // save cache
-        @file_put_contents($this->getFileName(), $this->getConfig()->getNode()->asNiceXml());
+        @file_put_contents($this->getFileName(), $this->getConfig()->getNode()->asXml());
 
         return true;
     }

@@ -213,7 +213,7 @@ class Mage_Widget_Block_Adminhtml_Widget_Instance_Edit_Chooser_Block
                     $this->_mergeLayoutHandles((string)$child['handle']);
                 }
             }
-            $this->_layoutHandleUpdates[] = $updateXml->asNiceXml();
+            $this->_layoutHandleUpdates[] = $updateXml->asXml();
         }
     }
 

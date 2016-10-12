@@ -300,7 +300,7 @@ class Mage_Adminhtml_Model_Extension extends Varien_Object
             }
         }
 
-        if (!@file_put_contents($dir . DS . $fileName . '.xml', $xml->asNiceXml())) {
+        if (!@file_put_contents($dir . DS . $fileName . '.xml', $xml->asXml())) {
             return false;
         }
 
