@@ -460,7 +460,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                 $this->_saveSectionCache($this->getCacheId(), $sectionName, $xml, $level, $tags);
                 unset($xml->$sectionName);
             }
-            $this->_cachePartsForSave[$this->getCacheId()] = $xml->asXml('');
+            $this->_cachePartsForSave[$this->getCacheId()] = $xml->asXml();
         } else {
             return parent::saveCache($tags);
         }
@@ -495,7 +495,7 @@ class Mage_Core_Model_Config extends Mage_Core_Model_Config_Base
                     );
                 }
             }
-            $this->_cachePartsForSave[$cacheId] = $source->$sectionName->asXml('');
+            $this->_cachePartsForSave[$cacheId] = $source->$sectionName->asXml();
         }
         return $this;
     }
