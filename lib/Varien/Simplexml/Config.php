@@ -428,7 +428,7 @@ class Varien_Simplexml_Config
      */
     public function getXmlString()
     {
-        return $this->getNode()->asXml('');
+        return $this->getNode()->asXml();
     }
 
     /**
