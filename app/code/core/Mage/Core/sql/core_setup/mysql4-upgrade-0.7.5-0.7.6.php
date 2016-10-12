@@ -29,11 +29,4 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("
-ALTER TABLE {$this->getTable('design_change')}
-  DROP `package`,
-  DROP `theme`;
-ALTER TABLE {$this->getTable('design_change')} ADD `design` VARCHAR( 255 ) NOT NULL AFTER `store_id` ;
-");
-
 $installer->endSetup();

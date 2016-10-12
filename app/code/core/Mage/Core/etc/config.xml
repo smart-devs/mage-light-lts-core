@@ -77,9 +77,6 @@
                     <url_rewrite_tag>
                         <table>core_url_rewrite_tag</table>
                     </url_rewrite_tag>
-                    <design_change>
-                        <table>design_change</table>
-                    </design_change>
                     <flag>
                         <table>core_flag</table>
                     </flag>

@@ -29,12 +29,4 @@ $installer = $this;
 
 $installer->startSetup();
 
-$installer->run("
-
-ALTER TABLE `{$this->getTable('design_change')}`
- CHANGE `date_from` `date_from` DATE NULL,
- CHANGE `date_to` `date_to` DATE NULL
-
-");
-
 $installer->endSetup();
