@@ -178,15 +178,6 @@ CREATE TABLE `{$installer->getTable('core_url_rewrite_tag')}` (
   KEY `url_rewrite_id` (`url_rewrite_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `{$installer->getTable('design_change')}` (
-  `design_change_id` int(11) NOT NULL auto_increment,
-  `store_id` smallint(5) unsigned NOT NULL default '0',
-  `design` varchar(255) NOT NULL default '',
-  `date_from` date NOT NULL default '0000-00-00',
-  `date_to` date NOT NULL default '0000-00-00',
-  PRIMARY KEY  (`design_change_id`),
-  KEY `FK_DESIGN_CHANGE_STORE` (`store_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ");
 
 $installer->run("
@@ -213,10 +204,6 @@ ALTER TABLE `{$installer->getTable('core_url_rewrite')}`
 
 ALTER TABLE `{$installer->getTable('core_url_rewrite_tag')}`
   ADD CONSTRAINT `FK_CORE_URL_REWRITE_TAG_URL_REWRITE` FOREIGN KEY (`url_rewrite_id`) REFERENCES `{$installer->getTable('core_url_rewrite')}` (`url_rewrite_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `{$installer->getTable('design_change')}`
-  ADD CONSTRAINT `FK_DESIGN_CHANGE_STORE` FOREIGN KEY (`store_id`) REFERENCES `{$installer->getTable('core_store')}` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ");
 
 $installer->endSetup();

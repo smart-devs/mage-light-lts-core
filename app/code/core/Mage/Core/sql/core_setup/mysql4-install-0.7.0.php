@@ -182,23 +182,6 @@ create table {$this->getTable('core_url_rewrite_tag')} (
     foreign key (`url_rewrite_id`) references {$this->getTable('core_url_rewrite')} (`url_rewrite_id`) on delete cascade on update cascade
 ) engine=InnoDB default charset=utf8;
 
--- DROP TABLE if exists {$this->getTable('design_change')};
-CREATE TABLE {$this->getTable('design_change')} (
-`design_change_id` INT NOT NULL AUTO_INCREMENT,
-`store_id` smallint(5) unsigned NOT NULL ,
-`package` VARCHAR( 255 ) NOT NULL ,
-`theme` VARCHAR( 255 ) NOT NULL ,
-`date_from` DATE NOT NULL ,
-`date_to` DATE NOT NULL,
-KEY `FK_DESIGN_CHANGE_STORE` (`store_id`),
-PRIMARY KEY  (`design_change_id`)
-) ENGINE = innodb;
-
-ALTER TABLE {$this->getTable('design_change')}
-  ADD
-  CONSTRAINT `FK_DESIGN_CHANGE_STORE`
-   FOREIGN KEY (`store_id`)
-   REFERENCES {$this->getTable('core_store')} (`store_id`);
 ");
 
 $installer->endSetup();

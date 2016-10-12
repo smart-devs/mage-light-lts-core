@@ -27,14 +27,3 @@
 
 $installer = $this;
 /* @var $installer Mage_Core_Model_Resource_Setup */
-
-$conn = $installer->getConnection();
-$table = $this->getTable('design_change');
-
-try {
-    $conn->addColumn($table, 'design', "varchar(255) not null default ''");
-} catch (Exception $e) {
-}
-
-$conn->dropColumn($table, 'package');
-$conn->dropColumn($table, 'theme');

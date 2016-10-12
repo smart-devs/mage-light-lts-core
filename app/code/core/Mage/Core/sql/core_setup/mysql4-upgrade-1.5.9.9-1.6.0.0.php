@@ -101,11 +101,6 @@ $installer->getConnection()->dropForeignKey(
     'FK_CORE_VARIABLE_VALUE_VARIABLE_ID'
 );
 
-$installer->getConnection()->dropForeignKey(
-    $installer->getTable('core/design_change'),
-    'FK_DESIGN_CHANGE_STORE'
-);
-
 if ($usedDatabaseStorage) {
     $installer->getConnection()->dropForeignKey(
         $installer->getTable('core/file_storage'),
@@ -290,11 +285,6 @@ $installer->getConnection()->dropIndex(
 $installer->getConnection()->dropIndex(
     $installer->getTable('core/website'),
     'DEFAULT_GROUP_ID'
-);
-
-$installer->getConnection()->dropIndex(
-    $installer->getTable('core/design_change'),
-    'FK_DESIGN_CHANGE_STORE'
 );
 
 if ($usedDatabaseStorage) {
@@ -898,38 +888,6 @@ $tables = array(
         ),
         'comment' => 'Url Rewrites'
     ),
-    $installer->getTable('core/design_change') => array(
-        'columns' => array(
-            'design_change_id' => array(
-                'type'      => Varien_Db_Ddl_Table::TYPE_INTEGER,
-                'identity'  => true,
-                'nullable'  => false,
-                'primary'   => true,
-                'comment'   => 'Design Change Id'
-            ),
-            'store_id' => array(
-                'type'      => Varien_Db_Ddl_Table::TYPE_SMALLINT,
-                'unsigned'  => true,
-                'nullable'  => false,
-                'default'   => '0',
-                'comment'   => 'Store Id'
-            ),
-            'design' => array(
-                'type'      => Varien_Db_Ddl_Table::TYPE_TEXT,
-                'length'    => 255,
-                'comment'   => 'Design'
-            ),
-            'date_from' => array(
-                'type'      => Varien_Db_Ddl_Table::TYPE_DATE,
-                'comment'   => 'First Date of Design Activity'
-            ),
-            'date_to' => array(
-                'type'      => Varien_Db_Ddl_Table::TYPE_DATE,
-                'comment'   => 'Last Date of Design Activity'
-            )
-        ),
-        'comment' => 'Design Changes'
-    ),
     $installer->getTable('core/flag') => array(
         'columns' => array(
             'flag_id' => array(
@@ -1296,12 +1254,6 @@ $installer->getConnection()->addIndex(
     array('default_group_id')
 );
 
-$installer->getConnection()->addIndex(
-    $installer->getTable('core/design_change'),
-    $installer->getIdxName('core/design_change', array('store_id')),
-    array('store_id')
-);
-
 if ($usedDatabaseStorage) {
     $installer->getConnection()->addIndex(
         $installer->getTable('core/file_storage'),
@@ -1429,14 +1381,6 @@ $installer->getConnection()->addForeignKey(
     'variable_id',
     $installer->getTable('core/variable'),
     'variable_id'
-);
-
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName('core/design_change', 'store_id', 'core/store', 'store_id'),
-    $installer->getTable('core/design_change'),
-    'store_id',
-    $installer->getTable('core/store'),
-    'store_id'
 );
 
 if ($usedDatabaseStorage) {
