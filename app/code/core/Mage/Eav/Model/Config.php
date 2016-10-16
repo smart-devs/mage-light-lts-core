@@ -81,6 +81,20 @@ class Mage_Eav_Model_Config
     protected $_initializedAttributes            = array();
 
     /**
+     * Product Attributes used in product listing
+     *
+     * @var array
+     */
+    protected $_attributesUsedInProductListing;
+
+    /**
+     * Product Attributes For Sort By
+     *
+     * @var array
+     */
+    protected $_attributesUsedForSortInProductListing;
+
+    /**
      * Attribute codes cache array
      *
      * @var array
@@ -337,6 +351,42 @@ class Mage_Eav_Model_Config
     }
 
     /**
+     * preload all attributes used for sort in product listing
+     *
+     * @return Mage_Eav_Model_Config
+     */
+    protected function _initAttributesUsedForSortInProductListing()
+    {
+        foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+            if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
+                if ((int)$attribute->getUsedForSortBy() == 1) {
+                    $this->_attributesUsedForSortInProductListing[$attribute->getAttributeCode()] = $attribute;
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * preload all attributes used in product listing
+     *
+     * @return Mage_Eav_Model_Config
+     */
+    protected function _initAttributesUsedInProductListing()
+    {
+        foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
+            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
+            if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
+                if ((int)$attribute->getUsedInProductListing() == 1) {
+                    $this->_attributesUsedInProductListing[$attribute->getAttributeCode()] = $attribute;
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Initialize all attributes for all entity types
      *
      * @return Mage_Eav_Model_Config
@@ -351,7 +401,13 @@ class Mage_Eav_Model_Config
         //try load information about attributes and attribute sets from cache
         $cache = $this->_loadDataFromCache(self::ATTRIBUTES_CACHE_ID);
         if ($cache) {
-            list($this->_attributeSets, $this->_attributes, $this->_references['attribute']) = unserialize($cache);
+            list(
+                    $this->_attributeSets,
+                    $this->_attributes,
+                    $this->_references['attribute'],
+                    $this->_attributesUsedInProductListing,
+                    $this->_attributesUsedForSortInProductListing
+                ) = unserialize($cache);
             Varien_Profiler::stop('EAV: ' . __METHOD__);
             return $this;
         }
@@ -361,9 +417,19 @@ class Mage_Eav_Model_Config
                 $this->_initAttributes($entityType);
             }
         }
+
+        $this->_initAttributesUsedForSortInProductListing();
+        $this->_initAttributesUsedInProductListing();
+
         if (true === $this->_isCacheEnabled()) {
             $this->_saveDataToCache(self::ATTRIBUTES_CACHE_ID,
-                serialize(array($this->_attributeSets, $this->_attributes, $this->_references['attribute']))
+                serialize(array(
+                    $this->_attributeSets,
+                    $this->_attributes,
+                    $this->_references['attribute'],
+                    $this->_attributesUsedInProductListing,
+                    $this->_attributesUsedForSortInProductListing
+                ))
             );
             // save entities types to cache because they are fully set now
             // (we've just added attribute_codes to each entity type object)
@@ -544,6 +610,28 @@ class Mage_Eav_Model_Config
         // it might happen that entity type doesn't have attributes (some custom one) or
         // there are no attributes in attribute set
         return empty($attributes) ? array() : $attributes;
+    }
+
+    /**
+     * return a list of all attributes used for sort by
+     *
+     * @return array
+     */
+    public function getProductAttributesUsedForSortBy()
+    {
+        $this->_initAllAttributes();
+        return $this->_attributesUsedForSortInProductListing;
+    }
+
+    /**
+     * return a list of all attributes used in product listing
+     *
+     * @return array
+     */
+    public function getAttributesUsedInProductListing()
+    {
+        $this->_initAllAttributes();
+        return $this->_attributesUsedInProductListing;
     }
 
     /**
