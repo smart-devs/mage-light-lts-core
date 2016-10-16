@@ -359,10 +359,8 @@ class Mage_Eav_Model_Config
     {
         foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
-                if ((int)$attribute->getUsedForSortBy() == 1) {
-                    $this->_attributesUsedForSortInProductListing[$attribute->getAttributeCode()] = $attribute;
-                }
+            if ((int)$attribute->getUsedForSortBy() == 1) {
+                $this->_attributesUsedForSortInProductListing[$attribute->getAttributeCode()] = $attribute;
             }
         }
         return $this;
@@ -377,10 +375,9 @@ class Mage_Eav_Model_Config
     {
         foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            if ($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute) {
-                if ((int)$attribute->getUsedInProductListing() == 1) {
-                    $this->_attributesUsedInProductListing[$attribute->getAttributeCode()] = $attribute;
-                }
+            if ((int)$attribute->getUsedInProductListing() == 1) {
+                $this->_attributesUsedInProductListing[$attribute->getAttributeCode()] = $attribute;
+
             }
         }
         return $this;
