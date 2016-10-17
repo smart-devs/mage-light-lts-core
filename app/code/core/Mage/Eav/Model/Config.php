@@ -612,6 +612,28 @@ class Mage_Eav_Model_Config
     }
 
     /**
+     * return a list of all attributes used in given attribute sets
+     *
+     * @return array
+     */
+    public function getAttributesUsedInSets($entityType, array $setIds)
+    {
+        $this->_initAllAttributes();
+        $out = array();
+        foreach ($setIds as $setId) {
+            if (true === isset($this->_attributeSets[$setId])) {
+                $out = array_merge($out,$this->_attributeSets[$setId]->getAttributeCodes());
+            }
+        }
+        $out = array_unique($out);
+        $return = array();
+        foreach ($out as $attributeCode){
+            $return[$attributeCode] = $this->getAttribute($entityType, $attributeCode);
+        }
+        return $return;
+    }
+
+    /**
      * return a list of all attributes used for sort by
      *
      * @return array
