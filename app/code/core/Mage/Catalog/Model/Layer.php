@@ -219,12 +219,7 @@ class Mage_Catalog_Model_Layer extends Varien_Object
             return array();
         }
         /** @var Mage_Eav_Model_Config $eavConfig */
-        $attributes = Mage::getSingleton('eav/config')->getAttributesUsedInSets(Mage_Catalog_Model_Product::ENTITY, $setIds);
-        /** @var $collection Mage_Catalog_Model_Resource_Product_Attribute_Collection */
-        $attributes = array_filter($attributes,function($attribute) {
-            /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            return $attribute->getIsFilterable() == 1;
-        });
+        $attributes = Mage::getSingleton('eav/config')->getFilterableProductAttributesUsedInSets($setIds);
         usort($attributes, function ($attributeA, $attributeB){
             if ((int)$attributeA->getPosition() == (int)$attributeB->getPosition()) {
                 return 0;

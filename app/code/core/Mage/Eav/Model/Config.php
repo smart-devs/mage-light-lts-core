@@ -95,6 +95,13 @@ class Mage_Eav_Model_Config
     protected $_attributesUsedForSortInProductListing;
 
     /**
+     * filtered product attributes in sets for layered navigation
+     *
+     * @var array
+     */
+    protected $_filteredAttributeSetsUsedInProductListing;
+
+    /**
      * Attribute codes cache array
      *
      * @var array
@@ -194,6 +201,7 @@ class Mage_Eav_Model_Config
         $this->_attributes    = null;
         $this->_attributesUsedForSortInProductListing = null;
         $this->_attributesUsedInProductListing = null;
+        $this->_filteredAttributeSetsUsedInProductListing = null;
         return $this;
     }
 
@@ -357,6 +365,31 @@ class Mage_Eav_Model_Config
      *
      * @return Mage_Eav_Model_Config
      */
+    protected function _initFilterableAttributesInAttributeSetsUsedInProductListing()
+    {
+        $productEntityType = Mage_Catalog_Model_Product::ENTITY;
+        $productEntityTypeId = $this->getEntityType(Mage_Catalog_Model_Product::ENTITY)->getEntityTypeId();
+        $productAttributeSets = array_filter($this->_attributeSets, function ($attributeSet) use ($productEntityTypeId) {
+            /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSet */
+            return (int)$attributeSet->getEntityTypeId() == $productEntityTypeId;
+        });
+        $this->_filteredAttributeSetsUsedInProductListing = array();
+        foreach ($productAttributeSets as $attributeSet) {
+            /** @var Mage_Eav_Model_Entity_Attribute_Set $attributeSet */
+            $this->_filteredAttributeSetsUsedInProductListing[$attributeSet->getAttributeSetId()] = array();
+            $this->_filteredAttributeSetsUsedInProductListing[$attributeSet->getAttributeSetId()] = array_filter(
+                $this->_attributeSets[$attributeSet->getAttributeSetId()]->getAttributeCodes(), function ($attribute) use ($productEntityType) {
+                return (int)$this->_attributes[$productEntityType][$attribute]->getIsFilterable() == 1;
+            });
+        }
+        return $this;
+    }
+
+    /**
+     * preload all attributes used for sort in product listing
+     *
+     * @return Mage_Eav_Model_Config
+     */
     protected function _initAttributesUsedForSortInProductListing()
     {
         $this->_attributesUsedForSortInProductListing = array_filter($this->_attributes[Mage_Catalog_Model_Product::ENTITY], function ($attribute) {
@@ -396,11 +429,12 @@ class Mage_Eav_Model_Config
         $cache = $this->_loadDataFromCache(self::ATTRIBUTES_CACHE_ID);
         if ($cache) {
             list(
-                    $this->_attributeSets,
-                    $this->_attributes,
-                    $this->_references['attribute'],
-                    $this->_attributesUsedInProductListing,
-                    $this->_attributesUsedForSortInProductListing
+                $this->_attributeSets,
+                $this->_attributes,
+                $this->_references['attribute'],
+                $this->_attributesUsedInProductListing,
+                $this->_attributesUsedForSortInProductListing,
+                $this->_filteredAttributeSetsUsedInProductListing
                 ) = unserialize($cache);
             Varien_Profiler::stop('EAV: ' . __METHOD__);
             return $this;
@@ -414,6 +448,7 @@ class Mage_Eav_Model_Config
 
         $this->_initAttributesUsedForSortInProductListing();
         $this->_initAttributesUsedInProductListing();
+        $this->_initFilterableAttributesInAttributeSetsUsedInProductListing();
 
         if (true === $this->_isCacheEnabled()) {
             $this->_saveDataToCache(self::ATTRIBUTES_CACHE_ID,
@@ -422,7 +457,8 @@ class Mage_Eav_Model_Config
                     $this->_attributes,
                     $this->_references['attribute'],
                     $this->_attributesUsedInProductListing,
-                    $this->_attributesUsedForSortInProductListing
+                    $this->_attributesUsedForSortInProductListing,
+                    $this->_filteredAttributeSetsUsedInProductListing
                 ))
             );
             // save entities types to cache because they are fully set now
@@ -611,20 +647,20 @@ class Mage_Eav_Model_Config
      *
      * @return array
      */
-    public function getAttributesUsedInSets($entityType, array $setIds)
+    public function getFilterableProductAttributesUsedInSets(array $setIds)
     {
         $this->_initAllAttributes();
         Varien_Profiler::start('EAV: ' . __METHOD__);
         $out = array();
         foreach ($setIds as $setId) {
-            if (true === isset($this->_attributeSets[$setId])) {
-                $out = array_merge($out,$this->_attributeSets[$setId]->getAttributeCodes());
+            if (true === isset($this->_filteredAttributeSetsUsedInProductListing[$setId])) {
+                $out = array_merge($out, $this->_filteredAttributeSetsUsedInProductListing[$setId]);
             }
         }
         $out = array_unique($out);
         $return = array();
-        foreach ($out as $attributeCode){
-            $return[$attributeCode] = $this->getAttribute($entityType, $attributeCode);
+        foreach ($out as $attributeCode) {
+            $return[$attributeCode] = $this->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode);
         }
         Varien_Profiler::stop('EAV: ' . __METHOD__);
         return $return;
