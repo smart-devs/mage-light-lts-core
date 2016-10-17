@@ -192,6 +192,8 @@ class Mage_Eav_Model_Config
         $this->_entityTypes   = null;
         $this->_attributeSets = null;
         $this->_attributes    = null;
+        $this->_attributesUsedForSortInProductListing = null;
+        $this->_attributesUsedInProductListing = null;
         return $this;
     }
 
