@@ -615,7 +615,6 @@ class Mage_Eav_Model_Config
     {
         $this->_initAllAttributes();
         Varien_Profiler::start('EAV: ' . __METHOD__);
-        $start = xdebug_time_index();
         $out = array();
         foreach ($setIds as $setId) {
             if (true === isset($this->_attributeSets[$setId])) {
@@ -627,7 +626,6 @@ class Mage_Eav_Model_Config
         foreach ($out as $attributeCode){
             $return[$attributeCode] = $this->getAttribute($entityType, $attributeCode);
         }
-        var_dump(xdebug_time_index()-$start);
         Varien_Profiler::stop('EAV: ' . __METHOD__);
         return $return;
     }
