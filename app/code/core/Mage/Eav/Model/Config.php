@@ -359,12 +359,10 @@ class Mage_Eav_Model_Config
      */
     protected function _initAttributesUsedForSortInProductListing()
     {
-        foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
+        $this->_attributesUsedForSortInProductListing = array_filter($this->_attributes[Mage_Catalog_Model_Product::ENTITY], function ($attribute) {
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            if ((int)$attribute->getUsedForSortBy() == 1) {
-                $this->_attributesUsedForSortInProductListing[$attribute->getAttributeCode()] = $attribute;
-            }
-        }
+            return (int)$attribute->getUsedForSortBy() == 1;
+        });
         return $this;
     }
 
@@ -375,13 +373,10 @@ class Mage_Eav_Model_Config
      */
     protected function _initAttributesUsedInProductListing()
     {
-        foreach ($this->_attributes[Mage_Catalog_Model_Product::ENTITY] as $attribute) {
+        $this->_attributesUsedInProductListing = array_filter($this->_attributes[Mage_Catalog_Model_Product::ENTITY], function ($attribute) {
             /** @var Mage_Catalog_Model_Resource_Eav_Attribute $attribute */
-            if ((int)$attribute->getUsedInProductListing() == 1) {
-                $this->_attributesUsedInProductListing[$attribute->getAttributeCode()] = $attribute;
-
-            }
-        }
+            return (int)$attribute->getUsedInProductListing() == 1;
+        });
         return $this;
     }
 
@@ -619,6 +614,8 @@ class Mage_Eav_Model_Config
     public function getAttributesUsedInSets($entityType, array $setIds)
     {
         $this->_initAllAttributes();
+        Varien_Profiler::start('EAV: ' . __METHOD__);
+        $start = xdebug_time_index();
         $out = array();
         foreach ($setIds as $setId) {
             if (true === isset($this->_attributeSets[$setId])) {
@@ -630,6 +627,8 @@ class Mage_Eav_Model_Config
         foreach ($out as $attributeCode){
             $return[$attributeCode] = $this->getAttribute($entityType, $attributeCode);
         }
+        var_dump(xdebug_time_index()-$start);
+        Varien_Profiler::stop('EAV: ' . __METHOD__);
         return $return;
     }
 
