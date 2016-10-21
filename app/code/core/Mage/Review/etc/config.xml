@@ -132,15 +132,6 @@
                     </review>
                 </observers>
             </tag_tag_product_collection_load_after>
-            <catalog_block_product_list_collection>
-                <observers>
-                    <review>
-                        <type>model</type>
-                        <class>review/observer</class>
-                        <method>catalogBlockProductCollectionBeforeToHtml</method>
-                    </review>
-                </observers>
-            </catalog_block_product_list_collection>
         </events>
         <secure_url>
             <review_customer>/review/customer/</review_customer>
