@@ -114,8 +114,6 @@ class Mage_CatalogInventory_Model_Observer
         $productCollection = $observer->getEvent()->getCollection();
         if ($productCollection->hasFlag('require_stock_items')) {
             Mage::getModel('cataloginventory/stock')->addItemsToProducts($productCollection);
-        } else {
-            Mage::getModel('cataloginventory/stock_status')->addStockStatusToProducts($productCollection);
         }
         return $this;
     }

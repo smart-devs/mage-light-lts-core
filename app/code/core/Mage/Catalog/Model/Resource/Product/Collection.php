@@ -525,7 +525,10 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
     protected function _beforeLoad()
     {
         Mage::dispatchEvent('catalog_product_collection_load_before', array('collection' => $this));
-
+        //add join to url rewrite table
+        $this->_addUrlRewrite();
+        //add join to stock table
+        $this->_addStockStatus();
         return parent::_beforeLoad();
     }
 
@@ -537,10 +540,6 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
      */
     protected function _afterLoad()
     {
-        if ($this->_addUrlRewrite) {
-           $this->_addUrlRewrite($this->_urlRewriteCategory);
-        }
-
         if (count($this) > 0) {
             Mage::dispatchEvent('catalog_product_collection_load_after', array('collection' => $this));
         }
@@ -548,6 +547,17 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
         foreach ($this as $product) {
             if ($product->isRecurring() && $profile = $product->getRecurringProfile()) {
                 $product->setRecurringProfile(unserialize($profile));
+            }
+
+            // handle request path
+            if(null === $product->getData('request_path')){
+                $product->setData('request_path', false);
+            }
+            // handle stoock status -> @see Mage_CatalogInventory_Model_Observer::addStockStatusToCollection
+            if (false === $this->hasFlag('require_stock_items')) {
+                $product->setIsSalable($product->getData('stock_status'));
+                $object = new Varien_Object(array('is_in_stock' => $product->getData('stock_status')));
+                $product->setStockItem($object);
             }
         }
 
@@ -1145,68 +1155,58 @@ class Mage_Catalog_Model_Resource_Product_Collection extends Mage_Catalog_Model_
         } else {
             $this->_urlRewriteCategory = 0;
         }
-
-        if ($this->isLoaded()) {
-            $this->_addUrlRewrite();
-        }
-
         return $this;
     }
 
     /**
      * Add URL rewrites to collection
      *
+     * @return Mage_Catalog_Model_Resource_Product_Collection
      */
     protected function _addUrlRewrite()
     {
-        $urlRewrites = null;
-        if ($this->_cacheConf) {
-            if (!($urlRewrites = Mage::app()->loadCache($this->_cacheConf['prefix'] . 'urlrewrite'))) {
-                $urlRewrites = null;
-            } else {
-                $urlRewrites = unserialize($urlRewrites);
-            }
+        if(true !== $this->_addUrlRewrite){
+            return $this;
         }
-
-        if (!$urlRewrites) {
-            $productIds = array();
-            foreach($this->getItems() as $item) {
-                $productIds[] = $item->getEntityId();
-            }
-            if (!count($productIds)) {
-                return;
-            }
-
-            $select = $this->_factory->getProductUrlRewriteHelper()
-                ->getTableSelect($productIds, $this->_urlRewriteCategory, Mage::app()->getStore()->getId());
-
-            $urlRewrites = array();
-            foreach ($this->getConnection()->fetchAll($select) as $row) {
-                if (!isset($urlRewrites[$row['product_id']])) {
-                    $urlRewrites[$row['product_id']] = $row['request_path'];
-                }
-            }
-
-            if ($this->_cacheConf) {
-                Mage::app()->saveCache(
-                    serialize($urlRewrites),
-                    $this->_cacheConf['prefix'] . 'urlrewrite',
-                    array_merge($this->_cacheConf['tags'], array(Mage_Catalog_Model_Product_Url::CACHE_TAG)),
-                    $this->_cacheLifetime
-                );
-            }
+        if (0 == (int)$this->_urlRewriteCategory) {
+            $this->getSelect()->joinLeft(
+                array('r' => $this->getTable('core/url_rewrite')),
+                sprintf("r.id_path = CONCAT('product/', e.entity_id) AND `r`.`is_system` = 1 AND `r`.`store_id` = %u",
+                    $this->getStoreId()),
+                array('request_path')
+            );
+            return $this;
         }
-
-        foreach($this->getItems() as $item) {
-            if (empty($this->_urlRewriteCategory)) {
-                $item->setDoNotUseCategoryId(true);
-            }
-            if (isset($urlRewrites[$item->getEntityId()])) {
-                $item->setData('request_path', $urlRewrites[$item->getEntityId()]);
-            } else {
-                $item->setData('request_path', false);
-            }
+        if(0 != (int)$this->_urlRewriteCategory){
+            $this->getSelect()->joinLeft(
+                array('r' => $this->getTable('core/url_rewrite')),
+                sprintf("r.id_path = CONCAT('product/', e.entity_id, '/', '%u') AND `r`.`is_system` = 1 AND `r`.`store_id` = %u",
+                    (int)$this->_urlRewriteCategory,
+                    $this->getStoreId()),
+                array('request_path')
+            );
+            return $this;
         }
+    }
+
+    /**
+     * Add stock info collection items
+     *
+     * @return Mage_Catalog_Model_Resource_Product_Collection
+     */
+    protected function _addStockStatus()
+    {
+        if ($this->hasFlag('require_stock_items')) {
+            return $this;
+        }
+        $this->getSelect()->joinLeft(
+            array('stst' => $this->getTable('cataloginventory/stock_status')),
+            sprintf('stst.product_id = e.entity_id AND `stst`.`stock_id` = %u AND `stst`.`website_id` = %u',
+                Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID,
+                Mage::app()->getStore($this->getStoreId())->getWebsiteId()
+            ),
+            array('stock_status')
+        );
     }
 
     /**
